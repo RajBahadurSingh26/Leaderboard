@@ -1,3 +1,4 @@
+// import Chart from 'chart.js/auto'
 document.addEventListener('DOMContentLoaded', async () => {
     try {
         const response = await fetch("http://localhost:3001/data");
@@ -17,7 +18,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 sectionFilter.appendChild(option);
             });
         };
-
+        
         // Function to export data to CSV
         const exportToCSV = (data) => {
             const headers = ['Rank', 'Roll Number', 'Name', 'Section', 'Total Solved', 'Easy', 'Medium', 'Hard', 'LeetCode URL'];
@@ -46,6 +47,15 @@ document.addEventListener('DOMContentLoaded', async () => {
             link.click();
             document.body.removeChild(link);
         };
+       
+        const searchInput=document.getElementById('search');
+        searchInput.addEventListener('input',()=>{
+            const searchQuery=searchInput.value.toLowerCase();
+            const filteredData=data.filter((entry)=>
+            entry.name.toLowerCase().includes(searchQuery))
+    
+            renderLeaderboard(filteredData);
+        })
 
         // Function to render the leaderboard
         const renderLeaderboard = (sortedData) => {
@@ -58,8 +68,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <td class="p-4">${student.roll}</td>
                     <td class="p-4">
                         ${student.url.startsWith('https://leetcode.com/u/') 
-                            ? `<a href="${student.url}" target="_blank" class="text-blue-400">${student.name}</a>`
-                            : `<div class="text-red-500">${student.name}</div>`}
+                            ? <a href="${student.url}" target="_blank" class="text-blue-400">${student.name}</a>
+                            : <div class="text-red-500">${student.name}</div>}
                     </td>
                     <td class="p-4">${student.section || 'N/A'}</td>
                     <td class="p-4">${student.totalSolved || 'N/A'}</td>
